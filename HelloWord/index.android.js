@@ -22,9 +22,38 @@ var {
   TouchableOpacity,
   Component,
   Navigator,
+  BackAndroid,
+  ToolbarAndroid,
 } = React;
 
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+  },
+  toolbar: {
+    backgroundColor: '#3993cf',
+    height: 56,
+    fontSize: 18,
+    alignItems: 'center',
+    justifyContent :'space-between',
+  }
+});
 
+var _navigator = null;
+BackAndroid.addEventListener('hardwareBackPress', () => {
+  if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+    
+    _navigator.pop();
+    return true;
+  }
+
+  return false;
+});
 
 var HelloWord = React.createClass({
   
@@ -32,10 +61,11 @@ var HelloWord = React.createClass({
   render: function() {
     return (
         <Navigator
-          initialRoute={{id: 'SuggestList', name: 'Index'}}
+          style={styles.container}
+          initialRoute={{id: 'SuggestList', name: '投诉与建议',index:0}}
           renderScene={this.renderScene.bind(this)}
           configureScene={(route) => {
-            return Navigator.SceneConfigs.FloatFromRight;
+            return Navigator.SceneConfigs.FloatFromBottomAndroid;
           }} />
 
       );
@@ -44,15 +74,34 @@ var HelloWord = React.createClass({
   
   
   renderScene:function(route, navigator) {
+    _navigator = navigator;
     var routeId = route.id
-    
+    var _title = 'sda'
     if (routeId == 'Suggest') {
       return (
-        <Suggest   navigator={navigator} />
+        <View style={styles.container}>
+          <ToolbarAndroid
+              actions={[]}
+              navIcon={require('image!ico_right')}
+              onIconClicked={navigator.pop}
+              style={styles.toolbar}
+              titleColor="white"
+              title={route.name} />
+          <Suggest   navigator={navigator} />
+        </View>
       );
     }else if (routeId == 'SuggestList'){
       return (
-        <SuggestList  navigator={navigator} />
+        <View style={styles.container}>
+          <ToolbarAndroid
+              actions={[]}
+              navIcon={require('image!ico_right')}
+              onIconClicked={navigator.pop}
+              style={styles.toolbar}
+              titleColor="white"
+              title='投诉与建议' />
+          <SuggestList  navigator={navigator} />
+        </View>
       );
     }
 
