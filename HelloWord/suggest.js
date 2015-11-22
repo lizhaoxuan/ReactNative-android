@@ -60,10 +60,7 @@ var Suggest = React.createClass( {
   },
 
   render:function() {
-    
-
     return (
-
       <Navigator
           renderScene={this.renderScene.bind(this)}/>
 
